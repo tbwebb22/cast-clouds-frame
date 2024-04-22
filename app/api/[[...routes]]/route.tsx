@@ -6,15 +6,11 @@ import { handle } from 'frog/next';
 import { serveStatic } from 'frog/serve-static';
 import { abi } from '@/app/abi';
 import { baseSepolia } from 'viem/chains'; 
+import imageMap from '@/app/utils/imageMap';
 
 const app = new Frog({
   basePath: '/api',
 });
-
-const urlMap: Record<string, string> = {
-  0: 'https://i.imgur.com/0VNw4fC.png',
-  1: 'https://i.imgur.com/7khQFNx.png',
-}
 
 app.frame('/home/:id', (c) => {
   const id = c.req.param('id');
@@ -23,12 +19,12 @@ app.frame('/home/:id', (c) => {
 
   return c.res({
     action: `/finish/${id}`,
-    image: urlMap[id],
+    image: imageMap[id],
     imageAspectRatio: '1:1',
     intents: [
       <Button.Transaction target={`/mint/${id}`}>Mint</Button.Transaction>,
     ],
-  })
+  });
 });
 
 app.transaction('/mint/:id', (c) => {
