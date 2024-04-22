@@ -25,7 +25,7 @@ app.frame('/', (c) => {
     imageAspectRatio: '1:1',
     intents: [
       <Button.Link href="https://i.imgur.com/0VNw4fC.png">Hi-res Image</Button.Link>,
-      <Button.Transaction target="/mint/1">Mint</Button.Transaction>,
+      <Button.Transaction target="/mint/0">Mint</Button.Transaction>,
     ],
   })
 });
