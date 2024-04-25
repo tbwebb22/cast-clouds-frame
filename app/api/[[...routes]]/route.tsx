@@ -1,5 +1,4 @@
 /** @jsxImportSource frog/jsx */
-
 import { Button, Frog, TextInput } from 'frog';
 import { devtools } from 'frog/dev';
 import { handle } from 'frog/next';
@@ -11,6 +10,8 @@ import imageMap from '@/app/utils/imageMap';
 const app = new Frog({
   basePath: '/api',
 });
+
+const castCloudsAddress='0xc33D61f88f207D2c1E3E2e90cF389F9bfCb25C2a';
 
 app.frame('/home/:id', (c) => {
   const id = c.req.param('id');
@@ -37,11 +38,13 @@ app.transaction('/mint/:id', (c) => {
     chainId: `eip155:${baseSepolia.id}`,
     functionName: 'mint',
     args: [BigInt(id)],
-    to: '0xc33D61f88f207D2c1E3E2e90cF389F9bfCb25C2a',
+    to: castCloudsAddress,
   });
 });
 
 app.frame('/finish/:id', (c) => {
+  const id = c.req.param('id');
+
   return c.res({
     image: (
       <div style={{
@@ -49,7 +52,7 @@ app.frame('/finish/:id', (c) => {
         display: 'flex', 
         justifyContent: 'center', // Centers content horizontally
         alignItems: 'center', // Centers content vertically
-        fontSize: '40px', 
+        fontSize: '30px', 
         height: '100%', // Make sure the div takes full height of its container
         width: '100%', // Make sure the div takes full width of its container
         backgroundColor: 'black', // Background color for visibility
@@ -64,38 +67,10 @@ app.frame('/finish/:id', (c) => {
     imageAspectRatio: '1:1',
     intents: [
       <Button.Link href="https://warpcast.com/~/channel/cast-clouds">/cast-clouds</Button.Link>,
+      <Button.Link href={`https://testnets.opensea.io/assets/base-sepolia/${castCloudsAddress}/${id}`}>View on OpenSea</Button.Link>,
     ]
   });
 });
-
-
-
-// app.frame('/mintbutton', (c) => {
-//   const { buttonValue } = c;
-//   console.log("mintbutton");
-//   return c.res({
-//     // image: `${process.env.NEXT_PUBLIC_SITE_URL}/cast-cloud-daos.png`,
-//     image: "https://i.imgur.com/0VNw4fC.png",
-//     imageAspectRatio: '1:1',
-//     intents: [
-//       <Button.Mint target="eip155:84532:0xc33D61f88f207D2c1E3E2e90cF389F9bfCb25C2a:0">Mint</Button.Mint>,
-//     ]
-//   })
-// })
-
-// app.frame('/finish', (c) => {
-//   console.log("finish: ", c);
-//   const { transactionId } = c;
-//   console.log("transactionID: ", transactionId);
-
-//   return c.res({
-//     image: (
-//       <div style={{ color: 'white', display: 'flex', fontSize: 60 }}>
-//         Transaction ID: {transactionId}
-//       </div>
-//     )
-//   });
-// });
 
 devtools(app, { serveStatic });
 
